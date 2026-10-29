@@ -91,6 +91,8 @@ Optional (all in the same env file; see `deploy/forgotten.env.example`):
 | `Discord__FlexRoleId` | Restrict `/nft showcase` + flex to a holders role |
 | `Discord__VerifyLogChannelId` | Post a "Wallet Verified" embed to this channel on each verification |
 | `WalletVerification__TipLinkClientId` | Enables the TipLink wallet button (clientId is request-only from TipLink) |
+| `Helius__WebhookSecret` | Shared secret for the Helius webhook receiver. Set a strong random string to enable near-real-time role updates (see step 7); the `POST /api/helius/webhook` endpoint returns `503` until it is set. |
+| `Helius__ApiKey` | Helius API key for webhook registration. Optional — falls back to the `api-key` embedded in `Solana__DasEndpoint`. |
 
 ## 5. Publish & deploy the apps
 
@@ -115,12 +117,43 @@ ssh -i <your-key.pem> ubuntu@<public_ip> 'journalctl -u forgotten-bot -n 30 --no
 In Discord the bot should be online; `/wallet connect` now returns a
 `https://verify.forgottennft.com/verify/...` link that works for any member.
 
-## 7. Updating later
+## 7. Enable near-real-time updates (Helius webhook)
+
+Roles reconcile on a background poll by default. For **near-real-time** updates,
+register a Helius webhook that watches every verified wallet and reconciles within
+seconds of an on-chain transfer.
+
+Prerequisites: `Helius__WebhookSecret` set in `forgotten.env` (step 4), a Helius
+API key (via `Helius__ApiKey` or embedded in `Solana__DasEndpoint`), a public
+HTTPS `WalletVerification__PublicBaseUrl`, and at least one member who has run
+`/wallet connect`.
+
+In Discord, run:
+
+```
+/nft-admin webhook-sync
+```
+
+This upserts a single **raw** Helius webhook (by callback URL) watching all
+verified wallets. A raw webhook is used deliberately: Helius's *enhanced* parser
+types MPL Core (`MplCoreAsset`) transfers as `UNKNOWN` and never delivers them, so
+an enhanced webhook silently misses Core NFT transfers. **Re-run `webhook-sync`
+whenever the set of verified wallets changes** or the callback URL changes; it is
+idempotent. Confirm it took effect with `/nft-admin provider-status` or by watching
+`journalctl -u forgotten-bot` for `Webhook event …: reconciled N member(s)`.
+
+> Webhooks are a **signal, not proof** — the bot always re-verifies ownership
+> on-chain before changing roles. See
+> [ARCHITECTURE.md](ARCHITECTURE.md#near-real-time-ownership-reconciliation-helius-webhook-pipeline).
+
+## 8. Updating later
 
 Commit changes, then re-run step 5 (`publish-and-deploy.sh`). It replaces the
-binaries and restarts the services; pending migrations apply on startup.
+binaries and restarts the services; pending migrations apply on startup. If you
+changed the callback URL or added verified wallets, re-run `/nft-admin webhook-sync`
+(step 7).
 
-## 8. Backups & housekeeping
+## 9. Backups & housekeeping
 
 **Database backups** run in two layers:
 
@@ -139,7 +172,7 @@ Restore: `aws s3 cp s3://<bucket>/db/<file>.gz .`, `gunzip`, stop walletweb, dro
 - Costs: free-tier covers `t3.micro` for 12 months. After that, `t4g.micro`
   (ARM, publish `linux-arm64`) is the cheapest. Set a small AWS **Budget alert**.
 
-## 9. Tear down
+## 10. Tear down
 
 ```bash
 cd deploy/terraform && terraform destroy

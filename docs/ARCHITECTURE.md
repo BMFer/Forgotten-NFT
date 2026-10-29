@@ -101,6 +101,52 @@ Domain  ←  Application  ←  Infrastructure
   Phase 1+ add modules without re-plumbing. Discord.Net logs are bridged into
   `Microsoft.Extensions.Logging`.
 
+## Near-real-time ownership reconciliation (Helius webhook pipeline)
+
+Alongside the Phase 5 polling monitor, the engine reacts to on-chain activity
+within seconds via a Helius webhook. The polling `OwnershipMonitoringWorker`
+remains as the periodic backstop; the webhook is the low-latency path.
+
+```
+Solana tx touching a watched wallet
+        │
+        ▼
+  Helius (raw webhook, transactionTypes: Any)
+        │  POST (authHeader = Helius:WebhookSecret)
+        ▼
+  WalletWeb  POST /api/helius/webhook ──► WebhookInbox (durable, idempotent)
+        │                                   keyed by tx signature
+        ▼
+  Bot  WebhookDrainWorker (polls every 20s)
+        │  match touched addresses → verified wallets
+        ▼
+  re-verify ownership on-chain (DAS) ──► reconcile NFT-gated roles
+```
+
+- **Registration** — `/nft-admin webhook-sync` upserts a single Helius webhook by
+  callback URL (`HeliusWebhookRegistrar`): it finds an existing webhook with the
+  same URL and `PUT`s it, else `POST`s a new one and then `PUT`s the full config
+  (Helius's create does not reliably persist `accountAddresses`, so the watched
+  wallets are applied with a follow-up `PUT`). Re-running is safe.
+- **Raw, not enhanced** — the webhook is registered as a **raw** webhook
+  (`transactionTypes: ["Any"]`). Helius's *enhanced* parser types MPL Core
+  (`MplCoreAsset`) transfers as `UNKNOWN` and never emits them, so an enhanced
+  webhook silently drops Core NFT transfers. A raw webhook delivers every
+  transaction touching a watched wallet, and the engine re-verifies downstream.
+- **Receiver** — `WalletWeb` exposes `POST /api/helius/webhook`. It authenticates
+  the request against `Helius:WebhookSecret` (returns `503` until the secret is
+  set, `401` on mismatch), parses **both** the enhanced shape (`signature` +
+  `accountData`/`tokenTransfers`) and the raw shape (`transaction.signatures` +
+  `transaction.message.accountKeys`) via `HeliusWebhookParser`, and enqueues each
+  event into the durable `WebhookInbox` (idempotent on the transaction signature),
+  returning fast. The webhook is a **signal, not proof**.
+- **Drain** — the bot's `WebhookDrainWorker` (a `BackgroundService`) polls the
+  inbox every 20s (bounded per cycle, DAS-paced), resolves the touched addresses
+  to verified wallets, and runs the normal reconciliation path — **re-verifying
+  ownership on-chain** before granting/removing roles rather than trusting the
+  webhook payload. Processing is idempotent (re-processing an event just
+  re-reconciles).
+
 ## What Phase 0 deliberately does NOT include
 
 NFT domain/entities, DAS provider, metadata resolution, verification, wallet

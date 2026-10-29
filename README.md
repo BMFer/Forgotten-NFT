@@ -143,6 +143,7 @@ Administrator commands (guild administrators only; responses are ephemeral):
 | `/nft-admin role-unmap <collection>` | Stop granting a role for a collection |
 | `/nft-admin role-list` | List collection→role mappings |
 | `/nft-admin role-sync` | Reconcile NFT-gated roles against current ownership now |
+| `/nft-admin webhook-sync` | Create/refresh the Helius webhook to watch verified wallets (near-real-time role updates) |
 | `/nft-admin provider-status` | Show Solana provider configuration status |
 | `/nft-admin cache-clear` | Clear cached inspection data |
 | `/nft-admin verification-log` | Recent verification activity |
@@ -187,6 +188,15 @@ Admins map an approved collection to a role with `/nft-admin role-map`; the work
 NFT and removes it from those who no longer do. Safeguards (spec §11): a provider
 outage **never** strips roles; privileged roles (Administrator / Manage Roles /
 Manage Guild) and roles above the bot are refused.
+
+For **near-real-time** updates on top of the poll, run `/nft-admin webhook-sync` to
+register a Helius webhook that watches every verified wallet. On-chain transfers are
+then reconciled within seconds instead of waiting for the next poll. A **raw** webhook
+is used on purpose — Helius's *enhanced* parser types MPL Core (`MplCoreAsset`)
+transfers as `UNKNOWN` and never delivers them. The webhook is treated as a **signal,
+not proof**: the bot always re-verifies ownership on-chain before changing roles. See
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#near-real-time-ownership-reconciliation-helius-webhook-pipeline)
+and [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) step 7.
 
 > For live role changes the bot needs the **Manage Roles** permission and its role
 > positioned **above** the managed role in the server's role list.
@@ -246,6 +256,23 @@ Each phase is a self-contained, tested vertical slice. Full guides live in
 | **5 — Monitoring** | Background ownership tracking + role sync | ✅ Complete |
 | **6 — Game integration** | Ownership/eligibility interfaces for POW | ⬜ Next |
 
+### NFT Loyalty Staking (planned)
+
+A **non-custodial** loyalty-staking module: holders **keep their NFTs** (no lock, no escrow, no
+custody), opt in via a **Stake button on the interactive `/nft showcase` embed** (not the public 📢
+Flex post), and earn **project-supplied** rewards. Programs are **off until a project admin enables
+them**; **FORGOTTEN never funds payouts** and makes no APY/financial promises. It reuses the existing
+verified wallet mapping, ownership checks, Helius integration, and SQLite migrations. Full plan:
+[`docs/STAKING-ROADMAP.md`](docs/STAKING-ROADMAP.md) · spec: [`docs/FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md`](docs/FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md).
+
+| Phase | Deliverable | Status |
+|------|-------------|--------|
+| **S0 — Inspect & design** | Map showcase/verification/ownership/Helius/SQLite; impacted-file plan + policy + tests | ⬜ Planned |
+| **S1 — Stake button & records** | Schema + program config + stake/unstake service + **Stake/Unstake/Staked on the `/nft showcase` embed**; replay-safe; one active stake per asset | ⬜ Planned |
+| **S2 — Transfer monitoring** | Durable, authenticated, idempotent Helius webhook inbox + scheduled reconciliation + state transitions + benefit revocation | ⬜ Planned |
+| **S3 — Rewards & dashboard** | Configurable off-chain rewards, immutable ledger, project-funded redemptions, admin reporting, holder status | ⬜ Planned |
+| **S4 — On-chain rewards** | Separate, security-reviewed proposal (token funding, contracts, custody/legal review) — **out of MVP** | ⬜ Future |
+
 ## Security principles
 
 - Wallet ownership is **proven cryptographically** (Ed25519) — never by submitting an address.
@@ -263,6 +290,7 @@ See the spec's full security requirements and (as phases land) `docs/SECURITY.md
 - [Technical specification](docs/specs.md) — the complete requirement set.
 - [Architecture](docs/ARCHITECTURE.md) — layering, host, persistence baseline.
 - [Phase guides](docs/phases/README.md) — the phased build plan.
+- [Staking roadmap](docs/STAKING-ROADMAP.md) — the planned non-custodial NFT loyalty-staking module.
 
 ## License
 
