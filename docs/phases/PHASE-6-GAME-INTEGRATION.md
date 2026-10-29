@@ -2,7 +2,7 @@
 
 **Spec refs:** §14 (all), §4.2 Level 7, §10.3 (`NftEligibilityChangedEvent`),
 §20 (`EnablePowIntegration`), §22.6, §26
-**Status:** not started
+**Status:** ⏸️ On hold (2026-10-29) — deprioritized; not started, to resume in a later cycle
 **Deliverable (spec §22):** An external game (POW) can use verified NFT ownership
 and eligibility **without depending directly on blockchain APIs** — through
 clean, reusable application interfaces.
