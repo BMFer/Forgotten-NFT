@@ -254,6 +254,7 @@ Each phase is a self-contained, tested vertical slice. Full guides live in
 | **3 — Wallet** | Cryptographic Ed25519 wallet ownership proof | ✅ Complete |
 | **4 — Showcase** | Interactive, paginated `/nft showcase` | ✅ Complete |
 | **5 — Monitoring** | Background ownership tracking + role sync | ✅ Complete |
+| **5.1 — Webhook** | Near-real-time Helius webhook reconciliation (MPL Core) | ✅ Complete |
 | **6 — Game integration** | Ownership/eligibility interfaces for POW | ⏸️ On hold |
 
 ### NFT Loyalty Staking (planned)
