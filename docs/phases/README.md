@@ -31,6 +31,7 @@ real to extend.
 | 4 | [PHASE-4-GALLERY.md](PHASE-4-GALLERY.md) | §22.4, §6.2, §12 | Members browse owned NFTs in interactive Discord galleries. |
 | 5 | [PHASE-5-MONITORING.md](PHASE-5-MONITORING.md) | §22.5, §10, §11 | Bot safely detects ownership changes and reconciles Discord roles. |
 | 5.1 | [PHASE-5.1-WEBHOOKS.md](PHASE-5.1-WEBHOOKS.md) | §22.5, §10, §11, §9 | Helius webhook reconciles ownership within seconds (near-real-time path on top of the Phase 5 poll). |
+| 5.2 | [PHASE-5.2-TRACKS.md](PHASE-5.2-TRACKS.md) | §22.5, §8.2 | Posts an NFT-transfer embed to `#nft-tracks` when a webhook fires for a verified member. |
 | 6 | [PHASE-6-GAME-INTEGRATION.md](PHASE-6-GAME-INTEGRATION.md) | §22.6, §14 | External games (POW) consume verified ownership/eligibility without touching chain APIs. _(⏸️ on hold)_ |
 
 > **Phase 6 is on hold (2026-10-29).** Game/POW integration is deprioritized for now;

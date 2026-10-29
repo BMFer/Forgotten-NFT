@@ -255,6 +255,7 @@ Each phase is a self-contained, tested vertical slice. Full guides live in
 | **4 — Showcase** | Interactive, paginated `/nft showcase` | ✅ Complete |
 | **5 — Monitoring** | Background ownership tracking + role sync | ✅ Complete |
 | **5.1 — Webhook** | Near-real-time Helius webhook reconciliation (MPL Core) | ✅ Complete |
+| **5.2 — Transfer tracks** | `#nft-tracks` embed on webhook transfers (member + NFT + tx) | ✅ Complete |
 | **6 — Game integration** | Ownership/eligibility interfaces for POW | ⏸️ On hold |
 
 ### NFT Loyalty Staking (planned)
