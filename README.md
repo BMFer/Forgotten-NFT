@@ -269,8 +269,8 @@ verified wallet mapping, ownership checks, Helius integration, and SQLite migrat
 
 | Phase | Deliverable | Status |
 |------|-------------|--------|
-| **S0 — Inspect & design** | Map showcase/verification/ownership/Helius/SQLite; impacted-file plan + policy + tests | ⬜ Planned |
-| **S1 — Stake button & records** | Schema + program config + stake/unstake service + **Stake/Unstake/Staked on the `/nft showcase` embed**; replay-safe; one active stake per asset | ⬜ Planned |
+| **S0 — Inspect & design** | Map showcase/verification/ownership/Helius/SQLite; impacted-file plan + policy + tests | ✅ Complete |
+| **S1 — Stake button & records** | Schema + program config + stake/unstake service + **Stake/Unstake/Staked on the `/nft showcase` embed**; replay-safe; one active stake per asset | 🟢 Deployed (live test pending) |
 | **S2 — Transfer monitoring** | Durable, authenticated, idempotent Helius webhook inbox + scheduled reconciliation + state transitions + benefit revocation | ⬜ Planned |
 | **S3 — Rewards & dashboard** | Configurable off-chain rewards, immutable ledger, project-funded redemptions, admin reporting, holder status | ⬜ Planned |
 | **S4 — On-chain rewards** | Separate, security-reviewed proposal (token funding, contracts, custody/legal review) — **out of MVP** | ⬜ Future |

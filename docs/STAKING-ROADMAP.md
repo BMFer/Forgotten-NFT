@@ -42,8 +42,8 @@ state change. Ineligible NFTs / unverified users get no actionable button.
 
 | Phase | Deliverable | Status |
 |---|---|---|
-| **S0 — Inspect & design** | Confirm the showcase embed/handlers, wallet verification, ownership path, Helius capabilities, and migration approach. Produce an impacted-file plan, policy assumptions, and test strategy. | ⬜ Planned |
-| **S1 — Stake button & records** | SQLite schema (`StakingPrograms`, `Stakes`, `ProgramAudit`); admin program config; stake/unstake application service reusing fresh ownership checks; **Stake/Unstake/Staked buttons on the `/nft showcase` embed**; audit events; replay-safe interactions; one active stake per asset per program. No payouts. | ⬜ Planned |
+| **S0 — Inspect & design** | Confirm the showcase embed/handlers, wallet verification, ownership path, Helius capabilities, and migration approach. Produce an impacted-file plan, policy assumptions, and test strategy. | ✅ Done |
+| **S1 — Stake button & records** | SQLite schema (`StakingPrograms`, `Stakes`, `ProgramAudit`); admin program config; stake/unstake application service reusing fresh ownership checks; **Stake/Unstake/Staked buttons on the `/nft showcase` embed**; audit events; replay-safe interactions; one active stake per asset per program. No payouts. See [`phases/PHASE-S1-STAKING.md`](phases/PHASE-S1-STAKING.md). | 🟢 Deployed — live test pending |
 | **S2 — Transfer monitoring & reconciliation** | Durable, authenticated, idempotent Helius webhook inbox; scheduled reconciliation of active stakes; state transitions (`EndedByTransfer` / `PendingVerification`); revoke staking-derived Discord benefits; operator alerts + metrics. | ⬜ Planned |
 | **S3 — Project rewards & dashboard** | Configurable off-chain rewards + immutable `RewardLedger`; redemptions with **project-funded** fulfillment workflow; admin reporting; holder status in the showcase. | ⬜ Planned |
 | **S4 — On-chain rewards (future, out of MVP)** | Separate proposal only: token funding, contracts/transactions, custody risk review, audits, legal/compliance. Not built as part of the MVP. | ⬜ Future |
