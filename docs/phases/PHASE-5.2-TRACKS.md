@@ -96,3 +96,17 @@ the existing drain cycle; it never changes role logic and never fails the reconc
 - **Real transfer** on a watched wallet (tx `3eHU…Y7FJ`, inbox id 3) → the drainer logged
   `Announced transfer 3eHU…Y7FJ … (NFT: q6XB…MLut)` then `reconciled 1 member(s)` ~6s after
   delivery. The NFT was identified (not "unidentified") and the embed posted to `#nft-tracks`.
+
+### Refinement — tracked-collection gating + holdings list (2026-10-29)
+
+- **Gate by tracked collection:** only announce when the moved NFT belongs to a collection the guild
+  has **approved** (`ICollectionRegistryService.ListApprovedAsync`). A transfer involving no tracked
+  collection is still recorded in the `WebhookInbox` (the DB record) — it just isn't posted to the
+  channel. The decision lives in the pure, unit-tested `WebhookAddressFilter.SelectTrackedNfts`.
+- **"Still holds" list:** the embed now lists the NFTs the member currently holds from that
+  collection (best-effort DAS paging, capped), so it shows **what changed** and **what remains**.
+- ✅ **Live-verified in production (2026-10-30).** Both paths observed on real transfers to the
+  watched wallet: a **non-tracked** collection NFT (inbox id 11) logged
+  `no tracked-collection NFT; recorded in inbox, not announced` with **no** channel post; a
+  **tracked** collection NFT (inbox id 12) logged `Announced transfer … (NFT: q6XB…MLut, holds 9)`
+  and posted the embed with the "Still holds 9" list populated.
