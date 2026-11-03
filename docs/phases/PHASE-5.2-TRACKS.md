@@ -53,7 +53,9 @@ the existing drain cycle; it never changes role logic and never fails the reconc
 - [x] ⚠ Sanitize all asset-derived text (`Format.Sanitize`) and length-cap it before display
       (spec §8.2); send with `AllowedMentions.None`.
 - [x] Build the embed: member (author + avatar), NFT (name, thumbnail, collection + explorer link),
-      matched wallet, transaction link, "Ownership re-verified on-chain ✓".
+      matched wallet, transaction link, "Ownership re-verified on-chain ✓". The moved NFT's name and
+      each "still holds" entry link to the asset on **Solscan** (`solscan.io/account/{addr}`, which
+      resolves wallets, SPL mints, and MPL Core assets alike); the transaction links to `/tx/{sig}`.
 - [x] No-op when disabled or when the guild/channel is unavailable.
 
 ### 4.4 Wire into the drain worker (`WebhookDrainWorker`)

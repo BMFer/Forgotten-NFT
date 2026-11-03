@@ -175,6 +175,13 @@ app's in-app browser, where connecting and signing work. Inside a wallet browser
 single **Connect wallet** button, then a dedicated **✍️ Sign to verify** step so the approval
 prompt fires reliably.
 
+**Multi-tenant branding.** One deployment can serve the verification site under several hostnames,
+each rendering its own brand (title, banner, accent) and bound to a Discord guild — so a community
+sees its own branded page. It's **branding + attribution only**: wallet ownership stays global and
+the signed message still binds to the canonical domain. Configure it in the `Branding` section (see
+[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) §3 and
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#multi-tenant-branding--guild-attribution)).
+
 ## Ownership monitoring & roles
 
 A background worker (enabled by `NftEngine:EnableOwnershipMonitoring`, every

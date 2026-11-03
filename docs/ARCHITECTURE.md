@@ -147,6 +147,27 @@ Solana tx touching a watched wallet
   webhook payload. Processing is idempotent (re-processing an event just
   re-reconciles).
 
+## Multi-tenant branding & guild attribution
+
+One deployment can serve the wallet-verification site under several hostnames, each with its own
+brand, without duplicating the app or the ownership model.
+
+- **Config** — `TenantBrandingOptions` (the `Branding` section, bound in both the bot and walletweb)
+  holds a `Default` brand plus per-host `Tenants` (`Host`, optional `GuildId`, title/heading/accent/
+  banner/footer). `ResolveByHost` is case-insensitive and falls back to the default; unset tenant
+  fields inherit it.
+- **Per-host rendering** — behind Caddy the walletweb honors `X-Forwarded-Host` (`UseForwardedHeaders`)
+  and resolves the brand from the host the member actually visited. `VerificationPage`/`IndexPage`
+  substitute the brand's (HTML-escaped) title, heading, accent, and banner; unknown hosts get the
+  FORGOTTEN default.
+- **Attribution** — `/wallet connect` records the invoking guild on the `WalletVerificationChallenge`
+  (nullable `GuildId`), and the verification link is built from that guild's tenant host when one is
+  configured, so members land on their community's branded page.
+- **Deliberately branding + attribution only** — a wallet connection stays **global** (one verified
+  owner per Discord user), roles still reconcile wherever collections are mapped, and the Ed25519
+  signed message still binds to the single canonical domain. Tenants change the look and the link,
+  never the cryptographic domain binding or the ownership model.
+
 ## What Phase 0 deliberately does NOT include
 
 NFT domain/entities, DAS provider, metadata resolution, verification, wallet

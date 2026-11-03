@@ -71,6 +71,45 @@ Add an **A record** for the subdomain → the Elastic IP:
 (Keep the apex `forgottennft.com` / `www` on your marketing site.) Wait for it to
 resolve: `nslookup verify.forgottennft.com`.
 
+**Additional hostnames (aliases).** To serve the same site under another name (e.g.
+`verify.proofofmint.io`), add an `A` record for it → the same Elastic IP, then add the
+hostname to `alias_domains` in `terraform.tfvars` (Caddy serves all of them on one site
+block and auto-issues a separate Let's Encrypt cert per name). The **canonical** domain
+(`domain`) stays the one used for `/wallet connect` links and the Ed25519 signed-message
+domain binding — aliases are reachable but not the canonical verification origin. On an
+already-running box you can add the name to `/etc/caddy/Caddyfile` (comma-separated on the
+site line) and `sudo systemctl reload caddy` without redeploying.
+
+**Per-domain branding (optional).** An alias can render its own brand (title, heading, accent,
+banner) and bind to a Discord guild, so verifying on it looks like that community's own page.
+Add a tenant to the `Branding` section of `appsettings.json` (read by **both** the bot and
+walletweb):
+
+```jsonc
+"Branding": {
+  "Tenants": [
+    {
+      "Host": "verify.proofofmint.io",      // must match the served hostname
+      "GuildId": "1382087625229467748",      // links from /wallet connect in this guild use this host
+      "BrandName": "Proof of Mint",
+      "Title": "Proof of Mint — Wallet Verification",
+      "Heading": "🪙 Proof of Mint Wallet Verification",
+      "AccentColor": "#2fe3a2",
+      "BannerImage": "/img/proofofmint/banner.png",  // drop the file under wwwroot/img/...; "" for none
+      "IndexTagline": "Wallet verification for the Proof of Mint community.",
+      "FooterLabel": "proofofmint.io",
+      "FooterUrl": "https://proofofmint.io"
+    }
+  ]
+}
+```
+
+Unknown hosts fall back to the FORGOTTEN default, and any field a tenant omits inherits it.
+This is **branding + attribution only** — wallet ownership stays global (one verified connection
+per Discord user) and the signed message still binds to the canonical domain. Guild IDs are not
+secrets, so this lives in committed config, not the env file. See
+[ARCHITECTURE.md](ARCHITECTURE.md#multi-tenant-branding--guild-attribution).
+
 ## 4. Put secrets on the box
 
 ```bash
