@@ -1,10 +1,12 @@
-# Phase S3 — Rewards: accrual & balance
+# Phase S3 — Rewards: accrual, balance & redemption
 
 **Spec refs:** [`STAKING-ROADMAP.md`](../STAKING-ROADMAP.md) S3; [`FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md`](../FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md) §4, §6, §7
-**Status:** ✅ code complete + unit-tested; 🟢 deployed; ⏳ **first accrual lands overnight** (daily worker)
-**Deliverable (this slice, S3.0):** Stakes earn **off-chain loyalty points** that accrue daily into an
-immutable ledger, and members see their balance with **`/rewards`**. **Redemption** (structured reward
-catalog + project-funded fulfillment) is the next slice, **S3.1**.
+**Status:** ✅ code complete + unit-tested; 🟢 deployed. **S3.0 accrual verified live** (controlled probe:
+a backdated stake credited 3 idempotent daily rows = 30 pts, balance summed, cleaned up). **S3.1
+redemption** deployed.
+**Deliverable:** Stakes earn **off-chain loyalty points** that accrue daily into an immutable ledger
+(**S3.0**); members see their balance with **`/rewards`** and spend points on a **structured reward
+catalog** via **`/redeem`**, which admins fulfill manually (**S3.1**). FORGOTTEN funds nothing.
 
 > Builds on S1/S2: accrual reads the program rate stored in S1 and the stake intervals S1/S2 maintain.
 > Off-chain points only — FORGOTTEN never funds or auto-pays anything.
@@ -48,7 +50,20 @@ catalog + project-funded fulfillment) is the next slice, **S3.1**.
 - [ ] ⏳ **Live** — the daily worker credits yesterday's eligible stakes; confirm `/rewards` shows a
       growing balance (first entries land after the next UTC-day boundary + a worker run).
 
+## 5. Redemption (S3.1)
+
+- **`RewardItem`** catalog per (guild, program): name, cost, optional description + `Stock`. Admin
+  `/nft-admin reward-add | reward-remove | reward-list`.
+- **`Redemption`** record + `RedemptionService`: `/redeem <id>` checks the member's per-program
+  balance, **deducts points immediately** via an immutable negative ledger entry
+  (`redeem:{redemptionId}`), decrements stock, and files a **Pending** request. Admins see the queue
+  with `/nft-admin redemptions`, fulfill with `/nft-admin reward-fulfill <id>` (after delivering the
+  perk), or `reward-cancel <id>` to **refund** (positive adjustment `refund:{redemptionId}`) + restore
+  stock. **Project-funded, manual fulfillment — FORGOTTEN never delivers or pays.**
+- `/rewards` now also lists the redeemable catalog.
+- Tests: `RedemptionServiceTests` (6) — redeem deducts + pending, insufficient points, disabled,
+  out-of-stock + stock decrement, fulfill-only-when-pending, cancel refunds + restores stock.
+
 ### Deferred
-- **S3.1** — redemption: structured reward catalog (name/cost/desc), redeem → admin-fulfill workflow,
-  admin reporting. Caps + final partial-day accrual on stake end also land here.
+- Caps (per-program total-points cap) + final partial-day accrual on stake end.
 - **F1** — collection holder census (unverified wallets).
