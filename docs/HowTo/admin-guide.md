@@ -27,6 +27,22 @@ The engine is collection-agnostic — tell it which collections count for this s
 
 The **first** approved collection becomes the showcase default automatically.
 
+**Give members a one-click way to verify.** Post a persistent panel with a **Connect wallet** button to
+your onboarding channel:
+
+```text
+/nft-admin wallet-panel #verify-here   # omit the channel to post in the current one
+```
+
+Anyone who clicks the button gets their **own private** verification link (the same flow as
+`/wallet connect`) — no transaction, no funds moved, keys never shared. The button keeps working across
+bot restarts, so post it once and leave it. (The bot needs **Send Messages** in the target channel.)
+
+**See who verifies.** Set `Discord__VerifyLogChannelId` to a channel id (server config) and the bot
+posts a **✅ Wallet Verified** embed there each time a member verifies — their mention + avatar, the
+short wallet address, and how many of your default collection they hold. It posts within ~30s of
+verification and never re-announces on restart. (Requires `Discord__DevGuildId` set too.)
+
 ## 2. NFT-gated roles
 
 Grant a Discord role to holders of an approved collection:
@@ -108,6 +124,16 @@ Members redeem with `/redeem <id>` (points are deducted immediately). You fulfil
 
 **FORGOTTEN never delivers or funds rewards** — your project fulfills each one. Only publish rewards you
 can actually honor.
+
+**See the whole picture** with one report:
+
+```text
+/nft-admin rewards-report
+```
+
+Per program (🟢/🔴): active stakes, points **issued / redeemed / outstanding**, and distinct earners —
+plus guild-wide redemption counts (pending / fulfilled / cancelled). The footer flags if staking is
+globally off.
 
 ## 7. Per-domain branding
 

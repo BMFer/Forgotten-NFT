@@ -21,6 +21,7 @@ For how the system is built, see [`../ARCHITECTURE.md`](../ARCHITECTURE.md); to 
 
 ```text
 /nft-admin collection-add grEcjrsDT3eqMxcvR4XbwFWLrPSNTa2wumzHjvCKtvA FORGOTTEN
+/nft-admin wallet-panel #verify-here   # posts a Connect-wallet button members can click
 /nft-admin staking-configure  collection: grEcjrsDT3eqMxcvR4XbwFWLrPSNTa2wumzHjvCKtvA  rate-per-day: 10
 /nft-admin staking-enable     collection: grEcjrsDT3eqMxcvR4XbwFWLrPSNTa2wumzHjvCKtvA
 /nft-admin reward-add  collection: grEcjrsDT3eqMxcvR4XbwFWLrPSNTa2wumzHjvCKtvA  name: "Whitelist spot"  cost: 50
@@ -42,4 +43,5 @@ For how the system is built, see [`../ARCHITECTURE.md`](../ARCHITECTURE.md); to 
 ```text
 /nft-admin redemptions           → see pending requests
 /nft-admin reward-fulfill 1      → mark it delivered
+/nft-admin rewards-report        → program totals: stakes, points issued/redeemed, earners
 ```

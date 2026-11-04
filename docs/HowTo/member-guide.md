@@ -22,6 +22,9 @@ funds, or share your keys.
 The bot sends you a **private, single-use link** that expires shortly. Open it, connect a Solana wallet
 (Phantom / Solflare), and click **Sign to verify**.
 
+> **Prefer a button?** If the server posted a wallet panel, just click **🔐 Connect wallet** on it — it
+> does exactly the same thing as `/wallet connect` and sends you the same private link.
+
 - **On a phone?** The page offers **Open in Phantom / Open in Solflare** — tap that to open inside the
   wallet app's browser, where signing works reliably. (A plain mobile browser can't sign.)
 - Manage wallets anytime:
