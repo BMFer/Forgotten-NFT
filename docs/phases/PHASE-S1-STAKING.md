@@ -1,7 +1,7 @@
 # Phase S1 — Stake button & records
 
 **Spec refs:** [`STAKING-ROADMAP.md`](../STAKING-ROADMAP.md) S1; [`FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md`](../FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md) §3, §4, §6, §7, §8, §9, §11
-**Status:** ✅ code complete + unit-tested; 🟢 deployed to production (2026-10-30, migration applied); ⏳ **live end-to-end pending** (no real stake observed yet)
+**Status:** ✅ **complete & live-verified in production (2026-11-04)** — a holder staked and unstaked a real NFT from the `/nft showcase` button, and both events posted to `#nft-tracks`.
 **Deliverable:** A verified holder can Stake/Unstake an eligible NFT directly on the existing
 `/nft showcase` embed. Non-custodial — records opt-in only; no payouts (rewards are S3).
 
@@ -76,9 +76,21 @@
 - [x] Build clean (0 warnings); full suite green (149 passed).
 - [x] Deployed to production (2026-10-30): `AddStakingTables` auto-applied on startup; the three
       tables and the partial unique index are confirmed present in the live DB; services healthy.
-- [ ] ⏳ **Live end-to-end** — approve a collection, `staking-configure` + `staking-enable`, set
-      `NftEngine:EnableStaking=true`, then Stake/Unstake from `/nft showcase`. **Not yet observed**
-      (`EnableStaking` is still off in production; do not claim live success until then — spec §25).
+- [x] ✅ **Live end-to-end (2026-11-04)** — with `NftEngine:EnableStaking=true` and an enabled
+      FORGOTTEN program, a holder clicked **🔒 Stake** on `/nft showcase` → the service re-verified
+      ownership on-chain and wrote an `Active` stake (`Stakes` id 1, bot log `Stake created: asset
+      DNfX… program 1 user 1089788…`); clicking **🔓 Unstake** ended it (`EndedByHolder`). Both events
+      posted a detailed embed to `#nft-tracks` (bot logs `Announced stake/unstake for …`).
+
+## 7. Community announcements (#nft-tracks)
+
+Each stake/unstake posts a detailed embed to the configured `Discord:NftTracksChannelId` channel
+(the same channel as transfer tracking — see [Phase 5.2](PHASE-5.2-TRACKS.md)). The embed shows the
+member (author + avatar), the NFT (name linked to Solscan + image), the collection, the holder's
+wallet, the **eligible staking program** (open/enabled/disabled + rate), the member's **🔒 staked**
+NFTs from that collection (each with a relative staked-on time), and their **still-unstaked** NFTs.
+Posting is best-effort and **failure-isolated** — a tracking error never affects the stake result —
+and only real transitions announce (never idempotent repeats or failures).
 
 ### Deferred to later staking phases
 - **S2** — transfer detection (reuse the Phase 5.1/5.2 webhook drain + polling), `EndedByTransfer` /

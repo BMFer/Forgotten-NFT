@@ -9,6 +9,9 @@ to the transaction.
 > Builds directly on [Phase 5.1](PHASE-5.1-WEBHOOKS.md): the drain worker already re-verifies
 > ownership on every webhook event — this phase adds a human-visible announcement alongside it.
 
+> The same `#nft-tracks` channel also receives **staking** stake/unstake embeds — see
+> [Phase S1](PHASE-S1-STAKING.md#7-community-announcements-nft-tracks).
+
 ---
 
 ## 1. Objective
