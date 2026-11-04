@@ -15,9 +15,11 @@ external games — without hardcoding any single NFT collection.
 > **holdings leaderboard** (`/nft showcase`, `/nft leaderboard`), **background ownership
 > monitoring with NFT-gated Discord roles**, a **verify-log announcer**, a **near-real-time
 > Helius webhook pipeline** with an **`#nft-tracks` transfer feed**, and **multi-tenant
-> per-domain branding** all work. **NFT loyalty staking** is live through **S2** — non-custodial
-> Stake/Unstake on the showcase, with stakes that **auto-end on transfer**. Phase 6 (external
-> game / POW integration) is **on hold**. See the [Roadmap](#roadmap).
+> per-domain branding** all work. **NFT loyalty staking** is live through **S3** — non-custodial
+> Stake/Unstake on the showcase with stakes that **auto-end on transfer** (S1–S2), plus **off-chain
+> loyalty points**: daily accrual + `/rewards`, a reward catalog + `/redeem` → project-funded admin
+> fulfillment (S3.0–S3.1 deployed), and an admin **rewards report** + gallery points balance (S3.2).
+> Phase 6 (external game / POW integration) is **on hold**. See the [Roadmap](#roadmap).
 
 The engine is **collection-agnostic**: it validates and displays NFTs from any
 compatible Solana collection, while game-specific logic (e.g. Dead Mint Carnival /
@@ -282,7 +284,7 @@ verified wallet mapping, ownership checks, Helius integration, and SQLite migrat
 | **S0 — Inspect & design** | Map showcase/verification/ownership/Helius/SQLite; impacted-file plan + policy + tests | ✅ Complete |
 | **S1 — Stake button & records** | Schema + program config + stake/unstake service + **Stake/Unstake/Staked on the `/nft showcase` embed**; replay-safe; one active stake per asset; stake events posted to `#nft-tracks` | ✅ Complete |
 | **S2 — Transfer monitoring** | Reuse the Helius webhook drain + a scheduled backstop sweep; stakes **auto-end on transfer** (`EndedByTransfer` / `PendingVerification`); folded into the transfer embed (no duplicate posts) | ✅ Complete |
-| **S3 — Rewards & dashboard** | Configurable off-chain rewards, immutable ledger, project-funded redemptions, admin reporting, holder status | ⬜ Planned |
+| **S3 — Rewards & dashboard** | Off-chain loyalty points: immutable ledger + daily accrual + `/rewards` (**S3.0**); reward catalog + `/redeem` → project-funded admin fulfillment (**S3.1**); admin `/nft-admin rewards-report` + points balance in the gallery footer (**S3.2**) | ✅ S3.0–S3.2 (accrual + redemption deployed; dashboard code-complete) |
 | **S4 — On-chain rewards** | Separate, security-reviewed proposal (token funding, contracts, custody/legal review) — **out of MVP** | ⬜ Future |
 | **F1 — Collection holder census** | Track **unverified** wallets holding the collection (DAS `getAssetsByGroup`) for analytics/leaderboards — separate from staking | ⬜ Future |
 

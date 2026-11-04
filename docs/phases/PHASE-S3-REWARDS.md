@@ -3,7 +3,7 @@
 **Spec refs:** [`STAKING-ROADMAP.md`](../STAKING-ROADMAP.md) S3; [`FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md`](../FORGOTTEN_NFT_STAKING_CLAUDE_CODE_SPEC.md) §4, §6, §7
 **Status:** ✅ code complete + unit-tested; 🟢 deployed. **S3.0 accrual verified live** (controlled probe:
 a backdated stake credited 3 idempotent daily rows = 30 pts, balance summed, cleaned up). **S3.1
-redemption** deployed.
+redemption** deployed. **S3.2 dashboard** code-complete + unit-tested (admin report + gallery balance).
 **Deliverable:** Stakes earn **off-chain loyalty points** that accrue daily into an immutable ledger
 (**S3.0**); members see their balance with **`/rewards`** and spend points on a **structured reward
 catalog** via **`/redeem`**, which admins fulfill manually (**S3.1**). FORGOTTEN funds nothing.
@@ -63,6 +63,23 @@ catalog** via **`/redeem`**, which admins fulfill manually (**S3.1**). FORGOTTEN
 - `/rewards` now also lists the redeemable catalog.
 - Tests: `RedemptionServiceTests` (6) — redeem deducts + pending, insufficient points, disabled,
   out-of-stock + stock decrement, fulfill-only-when-pending, cancel refunds + restores stock.
+
+## 6. Dashboard (S3.2)
+
+- **`/nft-admin rewards-report`** — guild-only, ephemeral admin embed. Per staking program (collection-named,
+  enabled/disabled marker): **active stake count**, points **issued** (sum of positive ledger entries),
+  **redeemed** (absolute value of `Redemption`-kind entries), **outstanding** (issued − redeemed), and
+  distinct **earners**. A footer field tallies guild redemptions by status (pending / fulfilled / cancelled)
+  and the embed footer surfaces whether staking is globally on/off (`NftEngine:EnableStaking`).
+- **Gallery footer balance** — `GalleryView.RewardsBalance` carries the member's total points; the
+  `/nft` gallery footer shows `💠 N points` when staking is enabled. The lookup is best-effort — a ledger
+  failure is logged at debug and simply omits the balance rather than breaking the gallery.
+- New repository reads (aggregate server-side where SQLite allows, else client-side over a guild-scoped
+  projection): `IRewardLedgerRepository.GetGuildSummaryAsync` (per-program issued/redeemed/earners) and
+  `IRedemptionRepository.GetStatusCountsAsync` (counts by status). Both scope strictly to one guild.
+- Tests: `RewardReportRepositoryTests` (4, real migrated SQLite) — summary rolls issued/redeemed/earners
+  per program and orders by program, empty guild → empty; status counts tally by status and ignore other
+  guilds, no redemptions → zeros. Fakes updated across the staking/gallery suites.
 
 ### Deferred
 - Caps (per-program total-points cap) + final partial-day accrual on stake end.
