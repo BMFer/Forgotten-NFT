@@ -151,9 +151,19 @@ Administrator commands (guild administrators only; responses are ephemeral):
 | `/nft-admin webhook-sync` | Create/refresh the Helius webhook to watch verified wallets (near-real-time role updates) |
 | `/nft-admin provider-status` | Show Solana provider configuration status |
 | `/nft-admin wallet-panel [channel]` | Post a persistent embed with a **Connect wallet** button members can click |
-| `/nft-admin staking-report [channel]` | Post a detailed **who-is-staked** report (per program, per member) to the admin channel |
 | `/nft-admin cache-clear` | Clear cached inspection data |
 | `/nft-admin verification-log` | Recent verification activity |
+
+Reporting suite — its own `/nft-report` group (admin-gated); most post to the admin channel:
+
+| Command | Does |
+|---|---|
+| `/nft-report rewards` | Staking + rewards aggregate summary (ephemeral) |
+| `/nft-report staking [channel]` | **Who-is-staked** detail (per program, per member) |
+| `/nft-report fulfillment [window] [channel]` | Redemption backlog + time-to-fulfill (SLA) |
+| `/nft-report economy [window] [channel]` | Points issued/redeemed, outstanding liability, top earners/spenders |
+| `/nft-report catalog [channel]` | Per-reward performance: redemptions, points spent, stock |
+| `/nft-report members [window] [channel]` | Verified-member summary (counts, new, multi-wallet) |
 
 > Verification keeps three facts strictly separate: **on-chain collection
 > verification ≠ registry approval ≠ ownership**.
@@ -309,6 +319,7 @@ See the spec's full security requirements and (as phases land) `docs/SECURITY.md
 - [Architecture](docs/ARCHITECTURE.md) — layering, host, persistence baseline.
 - [Phase guides](docs/phases/README.md) — the phased build plan.
 - [Staking roadmap](docs/STAKING-ROADMAP.md) — the non-custodial NFT loyalty-staking module.
+- [Admin reports roadmap](docs/ADMIN-REPORTS-ROADMAP.md) — the phased admin reporting suite (R1–R4).
 
 ## License
 
