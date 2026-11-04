@@ -296,7 +296,7 @@ verified wallet mapping, ownership checks, Helius integration, and SQLite migrat
 | **S0 — Inspect & design** | Map showcase/verification/ownership/Helius/SQLite; impacted-file plan + policy + tests | ✅ Complete |
 | **S1 — Stake button & records** | Schema + program config + stake/unstake service + **Stake/Unstake/Staked on the `/nft showcase` embed**; replay-safe; one active stake per asset; stake events posted to `#nft-tracks` | ✅ Complete |
 | **S2 — Transfer monitoring** | Reuse the Helius webhook drain + a scheduled backstop sweep; stakes **auto-end on transfer** (`EndedByTransfer` / `PendingVerification`); folded into the transfer embed (no duplicate posts) | ✅ Complete |
-| **S3 — Rewards & dashboard** | Off-chain loyalty points: immutable ledger + daily accrual + `/rewards` (**S3.0**); reward catalog + `/redeem` → project-funded admin fulfillment (**S3.1**); admin `/nft-admin rewards-report` + points balance in the gallery footer (**S3.2**) | ✅ S3.0–S3.2 (accrual + redemption deployed; dashboard code-complete) |
+| **S3 — Rewards & dashboard** | Off-chain loyalty points: immutable ledger + daily accrual + `/rewards` (**S3.0**); reward catalog + `/redeem` → project-funded admin fulfillment (**S3.1**); admin `/nft-report rewards` + points balance in the gallery footer (**S3.2**) | ✅ S3.0–S3.2 live (accrual + redemption + dashboard deployed & live-verified 2026-11-04) |
 | **S4 — On-chain rewards** | Separate, security-reviewed proposal (token funding, contracts, custody/legal review) — **out of MVP** | ⬜ Future |
 | **F1 — Collection holder census** | Track **unverified** wallets holding the collection (DAS `getAssetsByGroup`) for analytics/leaderboards — separate from staking | ⬜ Future |
 
