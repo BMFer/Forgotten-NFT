@@ -9,12 +9,15 @@ on Discord.Net. FORGOTTEN lets Discord members inspect Solana NFTs, cryptographi
 prove wallet ownership, browse their collections, and expose verified ownership to
 external games — without hardcoding any single NFT collection.
 
-> **Status:** Phases 0–5 complete and running in production. NFT inspection/verification,
+> **Status:** Phases 0–5 (+5.1/5.2) complete and running in production. NFT inspection/verification,
 > the `/nft-admin` registry, **cryptographic wallet verification** (`/wallet`, on desktop
 > **and** mobile), an **interactive NFT showcase** with a public **📢 Flex** and a
 > **holdings leaderboard** (`/nft showcase`, `/nft leaderboard`), **background ownership
-> monitoring with NFT-gated Discord roles**, and a **verify-log announcer** all work.
-> Phase 6 (external game / POW integration) is the last — see the [Roadmap](#roadmap).
+> monitoring with NFT-gated Discord roles**, a **verify-log announcer**, a **near-real-time
+> Helius webhook pipeline** with an **`#nft-tracks` transfer feed**, and **multi-tenant
+> per-domain branding** all work. **NFT loyalty staking** is live through **S2** — non-custodial
+> Stake/Unstake on the showcase, with stakes that **auto-end on transfer**. Phase 6 (external
+> game / POW integration) is **on hold**. See the [Roadmap](#roadmap).
 
 The engine is **collection-agnostic**: it validates and displays NFTs from any
 compatible Solana collection, while game-specific logic (e.g. Dead Mint Carnival /
@@ -278,9 +281,10 @@ verified wallet mapping, ownership checks, Helius integration, and SQLite migrat
 |------|-------------|--------|
 | **S0 — Inspect & design** | Map showcase/verification/ownership/Helius/SQLite; impacted-file plan + policy + tests | ✅ Complete |
 | **S1 — Stake button & records** | Schema + program config + stake/unstake service + **Stake/Unstake/Staked on the `/nft showcase` embed**; replay-safe; one active stake per asset; stake events posted to `#nft-tracks` | ✅ Complete |
-| **S2 — Transfer monitoring** | Durable, authenticated, idempotent Helius webhook inbox + scheduled reconciliation + state transitions + benefit revocation | ⬜ Planned |
+| **S2 — Transfer monitoring** | Reuse the Helius webhook drain + a scheduled backstop sweep; stakes **auto-end on transfer** (`EndedByTransfer` / `PendingVerification`); folded into the transfer embed (no duplicate posts) | ✅ Complete |
 | **S3 — Rewards & dashboard** | Configurable off-chain rewards, immutable ledger, project-funded redemptions, admin reporting, holder status | ⬜ Planned |
 | **S4 — On-chain rewards** | Separate, security-reviewed proposal (token funding, contracts, custody/legal review) — **out of MVP** | ⬜ Future |
+| **F1 — Collection holder census** | Track **unverified** wallets holding the collection (DAS `getAssetsByGroup`) for analytics/leaderboards — separate from staking | ⬜ Future |
 
 ## Security principles
 

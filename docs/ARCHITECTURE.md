@@ -168,6 +168,34 @@ brand, without duplicating the app or the ownership model.
   signed message still binds to the single canonical domain. Tenants change the look and the link,
   never the cryptographic domain binding or the ownership model.
 
+## NFT loyalty staking (S1–S2)
+
+An optional, **non-custodial** loyalty-staking module layered on the existing showcase, wallet, and
+webhook infrastructure. Holders keep their NFTs in their own wallets — "staking" records an opt-in,
+never a lock, escrow, or payout. Off by default behind a global `NftEngine:EnableStaking` switch plus
+per-program enable.
+
+- **Data** — `StakingPrograms` (per guild+collection), `Stakes` (with a **partial unique index** on
+  `(ProgramId, AssetAddress) WHERE EndedAt IS NULL` → one live stake per asset per program), and an
+  immutable `ProgramAudit`. State machine: `Active · PendingVerification · EndedByHolder ·
+  EndedByTransfer · EndedByAdmin · Suspended`.
+- **Admin** — `/nft-admin staking-configure | staking-enable | staking-disable | staking-list`
+  (inherits the Administrator-gated, test-enforced `nft-admin` auth). A program's collection must be
+  approved in the registry.
+- **Holder (S1)** — a **Stake/Unstake button on the `/nft showcase` embed**. The asset is taken from
+  the server-resolved page item (never the client), and `StakingService` **re-verifies ownership
+  on-chain** before any write; the partial unique index makes double-clicks idempotent. Each
+  stake/unstake posts a detailed embed to `#nft-tracks`.
+- **Transfer reconciliation (S2)** — `StakeReconciliationService` ends a stake when its NFT leaves the
+  holder's verified wallets. It runs **from the webhook drain** (near-real-time — a transfer out debits
+  the watched wallet) and from a **scheduled backstop sweep** (least-recently-checked live stakes;
+  retries `PendingVerification`). Webhooks are a **signal, not proof** — every end is gated on a fresh
+  DAS re-verify, so a provider outage parks the stake at `PendingVerification` rather than falsely
+  ending it. A webhook-driven end is **folded into the single transfer embed** (no duplicate post);
+  sweep-detected ends post standalone.
+- **Reuse, not duplication** — both the transfer and staking announcers share `TracksEmbedFormat`
+  (Solscan links, sanitization, capped lists, owned-NFT scan). Rewards/accrual are **deferred to S3**.
+
 ## What Phase 0 deliberately does NOT include
 
 NFT domain/entities, DAS provider, metadata resolution, verification, wallet
