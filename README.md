@@ -300,10 +300,11 @@ See the spec's full security requirements and (as phases land) `docs/SECURITY.md
 
 ## Documentation
 
+- [**How-to guides**](docs/HowTo/README.md) — example-driven usage for **members** and **admins**.
 - [Technical specification](docs/specs.md) — the complete requirement set.
 - [Architecture](docs/ARCHITECTURE.md) — layering, host, persistence baseline.
 - [Phase guides](docs/phases/README.md) — the phased build plan.
-- [Staking roadmap](docs/STAKING-ROADMAP.md) — the planned non-custodial NFT loyalty-staking module.
+- [Staking roadmap](docs/STAKING-ROADMAP.md) — the non-custodial NFT loyalty-staking module.
 
 ## License
 
