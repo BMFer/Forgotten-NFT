@@ -150,6 +150,8 @@ Administrator commands (guild administrators only; responses are ephemeral):
 | `/nft-admin role-sync` | Reconcile NFT-gated roles against current ownership now |
 | `/nft-admin webhook-sync` | Create/refresh the Helius webhook to watch verified wallets (near-real-time role updates) |
 | `/nft-admin provider-status` | Show Solana provider configuration status |
+| `/nft-admin wallet-panel [channel]` | Post a persistent embed with a **Connect wallet** button members can click |
+| `/nft-admin staking-report [channel]` | Post a detailed **who-is-staked** report (per program, per member) to the admin channel |
 | `/nft-admin cache-clear` | Clear cached inspection data |
 | `/nft-admin verification-log` | Recent verification activity |
 
