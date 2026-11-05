@@ -118,7 +118,7 @@ Member commands:
 |---|---|
 | `/nft inspect <address>` | Inspect an NFT: artwork, owner, traits, status |
 | `/nft verify <address>` | Layered verification — validity · on-chain collection · registry approval |
-| `/nft showcase [collection]` | Flex your NFTs — defaults to this server's collection; switch with the dropdown (or "All my NFTs"). Paginated, interactive, with a **📢 Flex** button to post an NFT publicly (with traits, your avatar, and a ✅ Verified holder badge). Optionally gated to a holders-only role (`Discord:FlexRoleId`) |
+| `/nft showcase [collection]` | Flex your NFTs — defaults to this server's collection; switch with the dropdown (or "All my NFTs"). Paginated, interactive, with a **📢 Flex** button to post an NFT publicly (with traits, your avatar, and a ✅ Verified holder badge). When an NFT is **staked**, a **🏆 Flex Staked** button also appears, posting the flex (badged 🔒 Staked) to a dedicated flex channel (`Discord:StakeFlexChannelId`). Optionally gated to a holders-only role (`Discord:FlexRoleId`) |
 | `/nft leaderboard` | Top 10 verified holders of this server's collection (cached ~10 min) |
 | `/nft collection <address>` | Show a collection and a page of its NFTs |
 | `/nft attributes <address>` | Show just the NFT's traits |
@@ -235,7 +235,7 @@ sync, which can also gate `/nft showcase` via `Discord:FlexRoleId`.
 
 | Section | Purpose | Notes |
 |---|---|---|
-| `Discord` | Bot token, optional dev guild id, holders-flex role (`FlexRoleId`), verify-log channel (`VerifyLogChannelId`) | Token is a **secret** |
+| `Discord` | Bot token, optional dev guild id, holders-flex role (`FlexRoleId`), verify-log channel (`VerifyLogChannelId`), staked-flex channel (`StakeFlexChannelId`) | Token is a **secret** |
 | `Database` | SQLite connection string, busy timeout | WAL + foreign keys enforced |
 | `Solana` | Network, DAS/RPC endpoints, timeouts, paging, cache TTL | DAS endpoint/API keys via secrets |
 | `Metadata` | IPFS/Arweave gateways, size/time/redirect limits | SSRF-guarded fetches |
