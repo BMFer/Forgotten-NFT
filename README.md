@@ -168,6 +168,7 @@ Reporting suite — its own `/nft-report` group (admin-gated); most post to the 
 | `/nft-report activity [window] [channel]` | Staking trend: starts/ends, churn by reason, avg duration |
 | `/nft-report audit [limit] [channel]` | Recent config changes (who changed what, when) |
 | `/nft-report holders [collection] [channel]` | **On-chain holder census**: supply, distinct holders, the verified-member split + % of supply, the gap (holders not yet verified), and top holders (DAS-backed, cached + capped) |
+| `/nft-report roledrift [channel]` | **Role drift**: per NFT-gated role, who's *eligible* (owns a qualifying NFT) vs. who currently *holds* it, with a **🔧 Fix now** button that reconciles the drifted members (guarded — same safeguards as `role-sync`) |
 
 > Verification keeps three facts strictly separate: **on-chain collection
 > verification ≠ registry approval ≠ ownership**.
