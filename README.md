@@ -164,6 +164,10 @@ Reporting suite — its own `/nft-report` group (admin-gated); most post to the 
 | `/nft-report economy [window] [channel]` | Points issued/redeemed, outstanding liability, top earners/spenders |
 | `/nft-report catalog [channel]` | Per-reward performance: redemptions, points spent, stock |
 | `/nft-report members [window] [channel]` | Verified-member summary (counts, new, multi-wallet) |
+| `/nft-report member <user>` | **Member 360**: one member's wallets, points, stakes, redemptions, roles (ephemeral) |
+| `/nft-report activity [window] [channel]` | Staking trend: starts/ends, churn by reason, avg duration |
+| `/nft-report audit [limit] [channel]` | Recent config changes (who changed what, when) |
+| `/nft-report holders [collection] [channel]` | **On-chain holder census**: supply, distinct holders, the verified-member split + % of supply, the gap (holders not yet verified), and top holders (DAS-backed, cached + capped) |
 
 > Verification keeps three facts strictly separate: **on-chain collection
 > verification ≠ registry approval ≠ ownership**.
