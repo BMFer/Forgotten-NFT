@@ -232,15 +232,19 @@ and [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) step 7.
 
 When `Discord:VerifyLogChannelId` is set, each successful wallet verification is announced to
 that channel as an embed — the member (with their avatar), their short wallet address, and how
-many of the server's default collection they hold. A member who verifies a wallet holding the
-mapped collection is granted the mapped role (e.g. a **Wallet Verified** role) by the ownership
-sync, which can also gate `/nft showcase` via `Discord:FlexRoleId`.
+many of the server's default collection they hold.
+
+**Verified-wallet role (`Discord:VerifiedWalletRoleId`).** Set this to grant a **"Wallet Verified"**
+role to **any** member who has a verified wallet — *independent of NFT holdings* (unlike the
+collection→role mappings, which gate on ownership). It's granted instantly on verification, topped up
+every ownership sweep, and on `/nft-admin role-sync`, all through the guarded role service (the role must
+be below the bot and not privileged). This role can also gate `/nft showcase` via `Discord:FlexRoleId`.
 
 ## Configuration overview
 
 | Section | Purpose | Notes |
 |---|---|---|
-| `Discord` | Bot token, optional dev guild id, holders-flex role (`FlexRoleId`), verify-log channel (`VerifyLogChannelId`), staked-flex channel (`StakeFlexChannelId`) | Token is a **secret** |
+| `Discord` | Bot token, optional dev guild id, holders-flex role (`FlexRoleId`), verify-log channel (`VerifyLogChannelId`), staked-flex channel (`StakeFlexChannelId`), **verified-wallet role** (`VerifiedWalletRoleId`) | Token is a **secret** |
 | `Database` | SQLite connection string, busy timeout | WAL + foreign keys enforced |
 | `Solana` | Network, DAS/RPC endpoints, timeouts, paging, cache TTL | DAS endpoint/API keys via secrets |
 | `Metadata` | IPFS/Arweave gateways, size/time/redirect limits | SSRF-guarded fetches |
